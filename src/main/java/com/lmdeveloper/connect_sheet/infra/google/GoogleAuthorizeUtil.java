@@ -43,8 +43,8 @@ public class GoogleAuthorizeUtil {
 
         GoogleAuthorizationCodeFlow flow = new GoogleAuthorizationCodeFlow
                 .Builder(GoogleNetHttpTransport.newTrustedTransport(), JSON_FACTORY, clientSecrets, SCOPES)
-                .setDataStoreFactory(new MemoryDataStoreFactory())
-//                .setDataStoreFactory(new FileDataStoreFactory(new File(TOKENS_DIRECTORY_PATH)))
+//                .setDataStoreFactory(new MemoryDataStoreFactory())
+                .setDataStoreFactory(new FileDataStoreFactory(new File(TOKENS_DIRECTORY_PATH)))
                 .setAccessType("offline")
                 .build();
         log.info("Criando fluxo de autorização");

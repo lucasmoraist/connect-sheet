@@ -7,17 +7,20 @@ import com.google.api.services.sheets.v4.Sheets;
 import com.lmdeveloper.connect_sheet.infra.google.GoogleAuthorizeUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 
-@Service
+@Configuration
 public class SheetsServiceUtil {
 
     private static final String APPLICATION_NAME = "Connect Sheet";
     private static final Logger log = LoggerFactory.getLogger(SheetsServiceUtil.class);
 
+    @Bean
     public static Sheets getSheetsService() throws IOException, GeneralSecurityException {
         Credential credential = GoogleAuthorizeUtil.authorize();
         log.info("Autorizando aplicação");

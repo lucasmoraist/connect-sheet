@@ -37,4 +37,40 @@ public class User {
     public void setEmail(String email) {
         this.email = email;
     }
+
+    public void update(User user) {
+        if (user.getName() != null) {
+            this.name = user.getName();
+        }
+        if (user.getEmail() != null) {
+            this.email = user.getEmail();
+        }
+    }
+
+    public static class Builder {
+        private String id;
+        private String name;
+        private String email;
+
+        public Builder() {}
+
+        public Builder id(String id) {
+            this.id = id;
+            return this;
+        }
+
+        public Builder name(String name) {
+            this.name = name;
+            return this;
+        }
+
+        public Builder email(String email) {
+            this.email = email;
+            return this;
+        }
+
+        public User build() {
+            return new User(this.id, this.name, this.email);
+        }
+    }
 }
