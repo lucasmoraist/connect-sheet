@@ -4,6 +4,7 @@ import com.google.api.services.sheets.v4.Sheets;
 import com.google.api.services.sheets.v4.model.*;
 import com.lmdeveloper.connect_sheet.infra.google.sheets.SheetsServiceUtil;
 import com.lmdeveloper.connect_sheet.model.User;
+import com.opencsv.CSVWriter;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -11,10 +12,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.io.FileWriter;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -239,5 +242,43 @@ class ConnectSheetApplicationTests {
         ).toList());
     }
 
+    @Test
+    @DisplayName("Transformando arquivo em CSV")
+    public void case09() throws IOException {
+        List<ValueRange> readResults = getSheetData("A1:E6");
+        log.info("Valores recebidos com sucesso.");
+
+        try (CSVWriter writer = new CSVWriter(new FileWriter("output.csv"))) {
+            log.info("Escrevendo no arquivo CSV");
+            for (ValueRange range : readResults) {
+                log.info("Lendo valores");
+                List<List<Object>> values = range.getValues();
+                log.info("Valores lidos com sucesso.");
+                for (List<Object> row : values) {
+                    // Escreve uma linha no CSV
+                    writer.writeNext(row.toArray(new String[0]));
+                    log.info("Linha escrita no arquivo CSV.");
+                }
+            }
+        }
+
+        System.out.println("Arquivo CSV gerado com sucesso.");
+    }
+
+    private static List<ValueRange> getSheetData(String intervaloEntreCelulas) throws IOException {
+        // Definindo os intervalos que serão lidos
+        List<String> ranges = Collections.singletonList(intervaloEntreCelulas);
+        log.info("Lendo intervalos: {}", ranges);
+
+        // Lendo os valores dos intervalos especificados
+        BatchGetValuesResponse readResult = sheetsService.spreadsheets().values()
+                .batchGet(SPREADSHEET_ID)
+                .setRanges(ranges)
+                .execute();
+        log.info("Valores lidos com sucesso.");
+
+        log.info("Retornando valores lidos.");
+        return readResult.getValueRanges();
+    }
 
 }

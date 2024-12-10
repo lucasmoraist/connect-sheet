@@ -65,7 +65,11 @@
 			<artifactId>google-api-services-sheets</artifactId>
 			<version>v4-rev20220927-2.0.0</version>
 		</dependency>
-
+		<dependency>
+			<groupId>com.opencsv</groupId>
+			<artifactId>opencsv</artifactId>
+			<version>5.9</version>
+		</dependency>
 	</dependencies>
 
 	<build>
